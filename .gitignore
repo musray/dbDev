@@ -1,0 +1,6 @@
+config/
+dump/
+node_modules/
+package.json
+verify.js
+*.swp
