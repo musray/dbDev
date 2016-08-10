@@ -9,7 +9,7 @@ const fs = require("fs"),
  // dcs_io: IO list database
  // util: working process management
 
-MongoClient.connect("mongodb://localhost:27017/cabinets", function(err, db) {
+MongoClient.connect("mongodb://localhost:27017/dmo", function(err, db) {
   assert.equal(err, null);
   console.log("Connected to MongoDB successfully!");
 
@@ -25,20 +25,28 @@ MongoClient.connect("mongodb://localhost:27017/cabinets", function(err, db) {
     // the handler of reading json file
     // then inserting the contents into MongoDB
     function(file, done) {
-      fs.readFile(file, "utf8", function(err, content) {
-        assert.equal(err, null);
-        var docs = JSON.parse(content);
-        console.log("Preparing to insert " + docs.length + " documents from " + file + "...");
+      console.log(file);
+      var content = fs.readFileSync(file, 'utf-8');
+      var docs = JSON.parse(content);
+      console.log(docs);
+      db.collection("ied").insertMany(docs);
 
-        // insert docs
-        db.collection("cabinets").insertMany(docs);
-        console.log("Inserted: " + file);
-        // verify results
+      // fs.readFile(file, "utf8", function(err, content) {
+      //   assert.equal(err, null);
+      //   var docs = JSON.parse(content);
+      //   console.log(docs);
+      //   console.log("Preparing to insert " + docs.length + " documents from " + file + "...");
+
+      //   // insert docs
+      //   db.collection("ied").insertMany(docs);
+      //   console.log("Inserted: " + file);
+      //   // verify results
           
-        done(err);
-      });
+      //   // done(err);
+      // });
     },
 
+    // 3rd argument
     // terminate handler
     function(err) {
       console.log(err);
